@@ -7,14 +7,27 @@ class ImageLoader {
 public:
     ImageLoader();
     ~ImageLoader();
+    
+    double angle;
+    
     bool loadFromFile(std::string path, SDL_Renderer* renderer);
+    
     void free();
-    void render(int x, int y, SDL_Renderer* renderer, SDL_Rect* clip = nullptr);
+    
+    SDL_Rect getRect() {return rect;}
+    
+    void setRect(const int &a, const int &b)  {
+        rect.x = a;
+        rect.y = b;
+    }
+    
+    void render(SDL_Renderer* renderer, SDL_Rect* clip = NULL);
+    
+    void renderEx(SDL_Renderer* renderer, SDL_Rect* clip, SDL_RendererFlip flip);
 
-private:
+protected:
     SDL_Texture* mTexture;
-    int mWidth;
-    int mHeight;
+    SDL_Rect rect;
 };
 
 #endif

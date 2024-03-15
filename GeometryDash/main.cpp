@@ -1,36 +1,7 @@
 #include "GameEngine/BaseFunc.hpp"
-
-//Texture wrapper class
-class LTexture
-{
-    public:
-        //Initializes variables
-        LTexture();
-
-        //Deallocates memory
-        ~LTexture();
-
-        //Loads image at specified path
-        bool loadFromFile( std::string path );
-
-        //Deallocates texture
-        void free();
-
-        //Renders texture at given point
-        void render( int x, int y );
-
-        //Gets image dimensions
-        int getWidth();
-        int getHeight();
-
-    private:
-        //The actual hardware texture
-        SDL_Texture* mTexture;
-
-        //Image dimensions
-        int mWidth;
-        int mHeight;
-};
+#include "GameEngine/BaseObjects.hpp"
+#include "GameEngine/Map.hpp"
+#include "Player/block.hpp"
 
 //Starts up SDL and creates window
 bool init();
@@ -42,8 +13,12 @@ bool loadMedia();
 void close();
 
 //Scene textures
-LTexture gBlockTexture;
-LTexture gBackgroundTexture;
+ImageLoader gBlockTexture;
+ImageLoader gBackgroundTexture;
+
+Map gMap;
+
+pBlock player;
 
 int main( int argc, char* args[] )
 {
@@ -66,6 +41,8 @@ int main( int argc, char* args[] )
 
             //Event handler
             SDL_Event e;
+            gMap.LoadMap("djsk");
+            gMap.LoadTileMap(gRenderer);
 
             //While application is running
             while( !quit )
@@ -78,6 +55,7 @@ int main( int argc, char* args[] )
                     {
                         quit = true;
                     }
+                    player.HandleEvent(e);
                 }
 
                 //Clear screen
@@ -85,13 +63,19 @@ int main( int argc, char* args[] )
                 SDL_RenderClear(gRenderer);
 
                 //Render background texture to screen
-                gBackgroundTexture.render(0, 0);
-
-                //Render Foo' to the screen
-                gBlockTexture.render(240, 190);
+                gBackgroundTexture.render(gRenderer);
+                
+                gMap.DrawMap(gRenderer);
+                
+                player.GetMap(gMap.getMap());
+                
+                player.DoBlock();
+                
+                player.Show(gRenderer);
 
                 //Update screen
                 SDL_RenderPresent(gRenderer);
+                SDL_Delay(1000/45);
             }
         }
     }
@@ -100,92 +84,6 @@ int main( int argc, char* args[] )
     close();
 
     return 0;
-}
-
-
-
-LTexture::LTexture()
-{
-    //Initialize
-    mTexture = NULL;
-    mWidth = 0;
-    mHeight = 0;
-}
-
-LTexture::~LTexture()
-{
-    //Deallocate
-    free();
-}
-
-bool LTexture::loadFromFile( std::string path )
-{
-    //Get rid of preexisting texture
-    free();
-
-    //The final texture
-    SDL_Texture* newTexture = NULL;
-
-    //Load image at specified path
-    SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-    if( loadedSurface == NULL )
-    {
-        printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
-    }
-    else
-    {
-        //Color key image
-        SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
-
-        //Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
-        if( newTexture == NULL )
-        {
-            printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
-        }
-        else
-        {
-            //Get image dimensions
-            mWidth = loadedSurface->w;
-            mHeight = loadedSurface->h;
-        }
-
-        //Get rid of old loaded surface
-        SDL_FreeSurface( loadedSurface );
-    }
-
-    //Return success
-    mTexture = newTexture;
-    return mTexture != NULL;
-}
-
-void LTexture::free()
-{
-    //Free texture if it exists
-    if( mTexture != NULL )
-    {
-        SDL_DestroyTexture( mTexture );
-        mTexture = NULL;
-        mWidth = 0;
-        mHeight = 0;
-    }
-}
-
-void LTexture::render( int x, int y )
-{
-    //Set rendering space and render to screen
-    SDL_Rect renderQuad = { x, y, mWidth, mHeight };
-    SDL_RenderCopy( gRenderer, mTexture, NULL, &renderQuad );
-}
-
-int LTexture::getWidth()
-{
-    return mWidth;
-}
-
-int LTexture::getHeight()
-{
-    return mHeight;
 }
 
 bool init()
@@ -247,14 +145,14 @@ bool loadMedia()
     //Loading success flag
     bool success = true;
     
-    if( !gBlockTexture.loadFromFile( "block.png" ) )
+    if( !gBlockTexture.loadFromFile( "icon_30.png", gRenderer ) )
     {
         printf( "Failed to load background texture image!\n" );
         success = false;
     }
 
     //Load background texture
-    if( !gBackgroundTexture.loadFromFile( "hinh.png" ) )
+    if( !gBackgroundTexture.loadFromFile( "hinh.png", gRenderer ) )
     {
         printf( "Failed to load background texture image!\n" );
         success = false;
@@ -268,13 +166,13 @@ void close()
     //Free loaded images
     gBlockTexture.free();
     gBackgroundTexture.free();
-
+    
     //Destroy window
     SDL_DestroyRenderer( gRenderer );
     SDL_DestroyWindow( gWindow );
     gWindow = NULL;
     gRenderer = NULL;
-
+    
     //Quit SDL subsystems
     IMG_Quit();
     SDL_Quit();

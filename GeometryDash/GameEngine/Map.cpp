@@ -26,13 +26,33 @@ void Map::LoadTileMap(SDL_Renderer *gRenderer) {
         s += ".png";
         TileMap[i].loadFromFile(s, gRenderer);
     }
+    game_map.start_x = 0;
+    game_map.start_y = 0;
+    game_map.max_x = MAX_MAP_X * TILE_SIZE;
+    game_map.max_y = MAX_MAP_Y * TILE_SIZE;
 }
 
 void Map::DrawMap(SDL_Renderer *gRenderer) {
-    for(int i = 0; i < 10; i++) {
-        for(int j = 0; j < 15; j++) {
-            int temp = MapType[i][j];
-            if(temp > 0) TileMap[temp].render(j*TILE_SIZE, i*TILE_SIZE, gRenderer);
+    int x1 = (game_map.start_x % TILE_SIZE) * -1;
+    int x2 = x1 + SCREEN_WIDTH + TILE_SIZE;
+    
+    int y1 = (game_map.start_y % TILE_SIZE) * -1;
+    int y2 = y1 + SCREEN_HEIGHT + TILE_SIZE;
+    
+    int tile_x = game_map.start_x / TILE_SIZE;
+    int tile_y = game_map.start_y / TILE_SIZE;
+    
+    for(int i = y1; i < y2; i+=TILE_SIZE) {
+        tile_x = game_map.start_x / TILE_SIZE;
+        for(int j = x1; j < x2; j+=TILE_SIZE) {
+            int temp = MapType[tile_y][tile_x];
+            if(temp > 0) {
+                TileMap[temp].setRect(j, i);
+                TileMap[temp].render(gRenderer);
+            }
+            tile_x++;
         }
+        tile_y++;
     }
+    game_map.start_x += RUN_SPEED;
 }
