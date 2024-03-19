@@ -74,7 +74,7 @@ int main( int argc, char* args[] )
                 
                 player.GetMap(gMap.getMap());
                 
-                player.DoBlock();
+                player.DoWave();
                 
                 player.Show(gRenderer);
 

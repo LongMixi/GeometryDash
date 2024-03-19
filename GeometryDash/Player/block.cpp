@@ -7,8 +7,6 @@
 
 #include "block.hpp"
 
-const int MAX_FALL_SPEED = JUMP_SPEED;
-
 pBlock::pBlock() {
     pos_x = -BLOCK_SIZE;
     pos_y = SCREEN_HEIGHT-3*TILE_SIZE;
@@ -16,6 +14,7 @@ pBlock::pBlock() {
     val_y = 0;
     angle = 0;
     mouseClick = 0;
+    mouseRepeat = false;
 }
 
 pBlock::~pBlock() {
@@ -25,13 +24,16 @@ pBlock::~pBlock() {
     val_y = 0;
     angle = 0;
     mouseClick = 0;
+    mouseRepeat = false;
 }
 
 void pBlock::HandleEvent(SDL_Event event) {
-    if(event.type == SDL_MOUSEBUTTONDOWN) {
+    if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT && !mouseRepeat) {
         mouseClick = 1;
-    } else if(event.type == SDL_MOUSEBUTTONUP) {
+        mouseRepeat = true;
+    } else if (event.type == SDL_MOUSEBUTTONUP && event.button.button == SDL_BUTTON_LEFT) {
         mouseClick = 0;
+        mouseRepeat = false;
     }
 }
 
@@ -68,6 +70,116 @@ void pBlock::DoBlock() {
     pos_x += val_x;
     pos_y += val_y;
 }
+
+void pBlock::DoBall() {
+    val_x = RUN_SPEED;
+    if(!onGround) {
+        val_y += GRAVITY * reverseGravity;
+        if(val_y * reverseGravity >= MAX_FALL_SPEED) {
+            val_y = MAX_FALL_SPEED * reverseGravity;
+        }
+    }
+    CheckToMap();
+    if(onGround && mouseClick) {
+        reverseGravity *= -1;
+        onGround = false;
+    }
+    if(mouseRepeat == true) {
+        mouseClick = 0;
+    }
+    pos_x += val_x;
+    pos_y += val_y;
+}
+
+
+void pBlock::DoSpider() {
+    val_x = RUN_SPEED;
+    if(!onGround && !isJumping) {
+        val_y += GRAVITY * reverseGravity;
+        if(val_y * reverseGravity >= MAX_FALL_SPEED) {
+            val_y = MAX_FALL_SPEED * reverseGravity;
+        }
+    }
+    if(onGround && mouseClick) {
+        reverseGravity *= -1;
+        val_y = 159 * reverseGravity;
+        onGround = false;
+    }
+    
+    //khi lap phim thi doi lai trang thai chuot
+    if(mouseRepeat == true) {
+        mouseClick = 0;
+    }
+    
+    CheckToMap();
+    pos_x += val_x;
+    pos_y += val_y;
+}
+
+
+void pBlock::DoShip() {
+    val_x = RUN_SPEED;
+    if(!onGround) {
+        val_y += GRAVITY * reverseGravity;
+        if(val_y * reverseGravity >= MAX_FALL_SPEED) {
+            val_y = MAX_FALL_SPEED * reverseGravity;
+        }
+    }
+    if(mouseClick) {
+        val_y -= 4;
+        if(val_y <= -MAX_FALL_SPEED) {
+            val_y = -MAX_FALL_SPEED;
+        }
+    }
+    CheckToMap();
+    pos_x += val_x;
+    pos_y += val_y;
+}
+
+
+void pBlock::DoWave() {
+    val_x = RUN_SPEED;
+    if(!onGround) {
+        val_y += GRAVITY * reverseGravity;
+        if(val_y * reverseGravity >= MAX_FALL_SPEED) {
+            val_y = MAX_FALL_SPEED * reverseGravity;
+        }
+    }
+    if(mouseClick) {
+        val_y = -RUN_SPEED;
+    } else {
+        val_y = RUN_SPEED;
+    }
+    CheckToMap();
+    pos_x += val_x;
+    pos_y += val_y;
+}
+
+
+void pBlock::DoRobot() {
+    val_x = RUN_SPEED;
+    if(!onGround && !isJumping) {
+        val_y += GRAVITY * reverseGravity;
+        if(val_y * reverseGravity >= MAX_FALL_SPEED) {
+            val_y = MAX_FALL_SPEED * reverseGravity;
+        }
+    }
+    if(onGround && mouseClick) {
+        reverseGravity *= -1;
+        val_y = 159 * reverseGravity;
+        onGround = false;
+    }
+    
+    //khi lap phim thi doi lai trang thai chuot
+    if(mouseRepeat == true) {
+        mouseClick = 0; 
+    }
+    
+    CheckToMap();
+    pos_x += val_x;
+    pos_y += val_y;
+}
+
 
 void pBlock::CheckToMap() {
     int x1, x2;
@@ -108,6 +220,16 @@ void pBlock::CheckToMap() {
         if(reverseGravity > 0) pos_y = y1*TILE_SIZE;
         else pos_y = (y1+1)*TILE_SIZE;
         onGround = true;
+        isJumping = false;
+        val_y = 0;
+    } else {
+        onGround = false;
+    }
+    
+    y1 = (pos_y + val_y - 1)/TILE_SIZE;
+    
+    if(MapType[y2][x1] != 0 || MapType[y1][x2] != 0) {
+        pos_y = (y1+1)*TILE_SIZE;
         isJumping = false;
         val_y = 0;
     } else {
