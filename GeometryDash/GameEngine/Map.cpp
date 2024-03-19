@@ -21,8 +21,13 @@ void Map::LoadMap(std::string s) {
 
 void Map::LoadTileMap(SDL_Renderer *gRenderer) {
     for(int i = 1; i <= MAX_TILE; i++) {
-        std::string s = "MapGD/map";
-        s += std::to_string(i);
+        std::string s;
+        if(i < 10) {
+            s += "MapGD/map";
+        } else {
+            s += "MapGD/gate";
+        }
+        s += std::to_string(i%10);
         s += ".png";
         TileMap[i].loadFromFile(s, gRenderer);
     }
@@ -54,5 +59,10 @@ void Map::DrawMap(SDL_Renderer *gRenderer) {
         }
         tile_y++;
     }
-    game_map.start_x += RUN_SPEED;
+    game_map.start_x = pos_x-3*TILE_SIZE;
+    if(pos_x <= 3*TILE_SIZE) {
+        game_map.start_x = 0;
+    } else if(pos_x >= game_map.max_x - SCREEN_WIDTH + 3*TILE_SIZE) {
+        game_map.start_x = game_map.max_x - SCREEN_WIDTH;
+    }
 }

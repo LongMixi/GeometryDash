@@ -30,6 +30,8 @@ public:
         map_start_x = map.start_x;
     }
     
+    int Pos_x() {return pos_x;}
+    
     void DoBlock();
     
     void CheckToMap();
@@ -43,6 +45,7 @@ private:
     
     bool onGround = false;
     bool isJumping = false;
+    int reverseGravity = 1;
     
     int map_start_x;
     

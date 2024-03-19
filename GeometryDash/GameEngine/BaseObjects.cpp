@@ -38,7 +38,7 @@ bool ImageLoader::loadFromFile(std::string s, SDL_Renderer* renderer) {
 
 void ImageLoader::free() {
     if (mTexture != NULL) {
-//        SDL_DestroyTexture(mTexture);
+        SDL_DestroyTexture(mTexture);
         mTexture = NULL;
         rect.x = 0;
         rect.y = 0;

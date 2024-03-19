@@ -20,6 +20,11 @@
 		3AA8CA952B9AB5AD0041FDDB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AA8CA942B9AB5AD0041FDDB /* Assets.xcassets */; };
 		3AA8CAC62B9AB6BD0041FDDB /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AA8CAC52B9AB6BD0041FDDB /* SDL2.framework */; };
 		3AA8CAC72B9AB6BD0041FDDB /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3AA8CAC52B9AB6BD0041FDDB /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3ABCA7AD2BA7399A00A18DA2 /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ABCA7AC2BA7399A00A18DA2 /* SDL2_mixer.framework */; };
+		3ABCA7AE2BA7399A00A18DA2 /* SDL2_mixer.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ABCA7AC2BA7399A00A18DA2 /* SDL2_mixer.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3ABCA7B02BA739A600A18DA2 /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ABCA7AF2BA739A600A18DA2 /* SDL2_ttf.framework */; };
+		3ABCA7B12BA739A600A18DA2 /* SDL2_ttf.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ABCA7AF2BA739A600A18DA2 /* SDL2_ttf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3ABCA7B42BA73A3B00A18DA2 /* Time.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3ABCA7B22BA73A3B00A18DA2 /* Time.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +51,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				3ABCA7B12BA739A600A18DA2 /* SDL2_ttf.framework in Embed Frameworks */,
+				3ABCA7AE2BA7399A00A18DA2 /* SDL2_mixer.framework in Embed Frameworks */,
 				3AA8CAC72B9AB6BD0041FDDB /* SDL2.framework in Embed Frameworks */,
 				3A5708B22BA19F4700A9D696 /* SDL2_image.framework in Embed Frameworks */,
 			);
@@ -75,6 +82,10 @@
 		3AA8CAA02B9AB5AE0041FDDB /* GeometryDashTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeometryDashTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AA8CAAA2B9AB5AE0041FDDB /* GeometryDashUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GeometryDashUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AA8CAC52B9AB6BD0041FDDB /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		3ABCA7AC2BA7399A00A18DA2 /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = ../../../../../Library/Frameworks/SDL2_mixer.framework; sourceTree = "<group>"; };
+		3ABCA7AF2BA739A600A18DA2 /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
+		3ABCA7B22BA73A3B00A18DA2 /* Time.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Time.cpp; sourceTree = "<group>"; };
+		3ABCA7B32BA73A3B00A18DA2 /* Time.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Time.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +93,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3ABCA7B02BA739A600A18DA2 /* SDL2_ttf.framework in Frameworks */,
+				3ABCA7AD2BA7399A00A18DA2 /* SDL2_mixer.framework in Frameworks */,
 				3AA8CAC62B9AB6BD0041FDDB /* SDL2.framework in Frameworks */,
 				3A5708B12BA19F4700A9D696 /* SDL2_image.framework in Frameworks */,
 			);
@@ -110,8 +123,10 @@
 				3A5708EF2BA1A4EA00A9D696 /* BaseFunc.hpp */,
 				3A5708F12BA1A4EA00A9D696 /* BaseObjects.hpp */,
 				3A5708F32BA1A4EA00A9D696 /* Map.hpp */,
+				3ABCA7B32BA73A3B00A18DA2 /* Time.hpp */,
 				3A5708F02BA1A4EA00A9D696 /* BaseObjects.cpp */,
 				3A5708F22BA1A4EA00A9D696 /* Map.cpp */,
+				3ABCA7B22BA73A3B00A18DA2 /* Time.cpp */,
 			);
 			path = GameEngine;
 			sourceTree = "<group>";
@@ -172,9 +187,11 @@
 		3AA8CAC42B9AB6BD0041FDDB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3ABCA7AF2BA739A600A18DA2 /* SDL2_ttf.framework */,
+				3ABCA7AC2BA7399A00A18DA2 /* SDL2_mixer.framework */,
 				3A5708B02BA19F4700A9D696 /* SDL2_image.framework */,
-				3A5708AF2BA19F3800A9D696 /* Frameworks */,
 				3AA8CAC52B9AB6BD0041FDDB /* SDL2.framework */,
+				3A5708AF2BA19F3800A9D696 /* Frameworks */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -316,6 +333,7 @@
 				3A5709012BA1A51900A9D696 /* block.cpp in Sources */,
 				3A57090C2BA2E3BD00A9D696 /* main.cpp in Sources */,
 				3A5708F52BA1A4EA00A9D696 /* BaseObjects.cpp in Sources */,
+				3ABCA7B42BA73A3B00A18DA2 /* Time.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,6 +2,7 @@
 #include "GameEngine/BaseObjects.hpp"
 #include "GameEngine/Map.hpp"
 #include "Player/block.hpp"
+#include "GameEngine/Time.hpp"
 
 //Starts up SDL and creates window
 bool init();
@@ -19,6 +20,8 @@ ImageLoader gBackgroundTexture;
 Map gMap;
 
 pBlock player;
+
+Timer gTime;
 
 int main( int argc, char* args[] )
 {
@@ -65,6 +68,8 @@ int main( int argc, char* args[] )
                 //Render background texture to screen
                 gBackgroundTexture.render(gRenderer);
                 
+                gMap.getPos_x(player.Pos_x());
+                
                 gMap.DrawMap(gRenderer);
                 
                 player.GetMap(gMap.getMap());
@@ -75,7 +80,12 @@ int main( int argc, char* args[] )
 
                 //Update screen
                 SDL_RenderPresent(gRenderer);
-                SDL_Delay(1000/45);
+                
+                int real_time = gTime.getTicks();
+                if(real_time < TIME_1_FPS) {
+                    int delay_time = TIME_1_FPS-real_time;
+                    SDL_Delay(delay_time);
+                }
             }
         }
     }
@@ -177,4 +187,3 @@ void close()
     IMG_Quit();
     SDL_Quit();
 }
-
