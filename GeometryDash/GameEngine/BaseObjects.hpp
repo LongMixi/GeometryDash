@@ -14,9 +14,9 @@ public:
     
     void free();
     
-    SDL_Rect getRect() {return rect;}
+    SDL_Rect getRect() const {return rect;}
     
-    void setRect(const int &a, const int &b)  {
+    void setRect(const int &a, const int &b) {
         rect.x = a;
         rect.y = b;
     }

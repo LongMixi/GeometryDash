@@ -22,7 +22,6 @@ bool ImageLoader::loadFromFile(std::string s, SDL_Renderer* renderer) {
         std::cout << "Unable to load image " << s << "! SDL_image Error: " << IMG_GetError() << std::endl;
         return false;
     }
-
     mTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
     if (mTexture == NULL) {
         std::cout << "Unable to create texture from " << s << "! SDL Error: " << SDL_GetError() << std::endl;

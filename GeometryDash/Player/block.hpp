@@ -10,13 +10,22 @@
 
 #include "BaseFunc.hpp"
 #include "BaseObjects.hpp"
+#include "Time.hpp"
 
 class pBlock : public ImageLoader{
 public:
     pBlock();
     ~pBlock();
     
-    void Show(SDL_Renderer *gRenderer, SDL_Rect *clip = NULL);
+    void loadImage(SDL_Renderer * renderer);
+    
+    void ShowBlock(SDL_Renderer *gRenderer, SDL_Rect *clip = NULL);
+    void ShowBall(SDL_Renderer *gRenderer, SDL_Rect *clip = NULL);
+    void ShowShip(SDL_Renderer *gRenderer, SDL_Rect *clip = NULL);
+    void ShowWave(SDL_Renderer *gRenderer, SDL_Rect *clip = NULL);
+    void ShowUFO(SDL_Renderer *gRenderer, SDL_Rect *clip = NULL);
+    void ShowRobot(SDL_Renderer *gRenderer, SDL_Rect *clip = NULL);
+    void ShowSpider(SDL_Renderer *gRenderer, SDL_Rect *clip = NULL);
     
     void HandleEvent(SDL_Event event);
     
@@ -25,6 +34,8 @@ public:
     }
     
     int Pos_x() {return pos_x;}
+    
+    int getType() {return typePlayer;};
     
     void DoBlock();
     void DoBall();
@@ -46,50 +57,15 @@ private:
     bool isJumping = false;
     int reverseGravity = 1;
     bool mouseRepeat = false;
+    int typePlayer = SPIDER;
+    int val_angle = 0;
+    int cntFrame = 0;
     
     int map_start_x;
     
-    ImageLoader character;
+    Timer mTime;
+    ImageLoader mBlock, mBall, mShip, mWave;
+    ImageLoader mRobot[15], mSpider[16];
 };
-
-
-
-//
-//class pBall : public ImageLoader {
-//public:
-//    pBall();
-//    ~pBall();
-//    void Show(SDL_Renderer *gRenderer, SDL_Rect *clip = NULL);
-//    
-//    void HandleEvent(SDL_Event event);
-//    
-//    void GetMap(Map_position map) {
-//        map_start_x = map.start_x;
-//    }
-//    
-//    int Pos_x() {return pos_x;}
-//    
-//    void DoBall();
-//    
-//    void CheckToMap();
-//    
-//private:
-//    float pos_x;
-//    float pos_y;
-//    
-//    float val_x;
-//    float val_y;
-//    
-//    bool onGround = false;
-//    bool isJumping = false;
-//    int reverseGravity = 1;
-//    
-//    int map_start_x;
-//    
-//    ImageLoader character;
-//};
-
-
-
 
 #endif /* block_hpp */

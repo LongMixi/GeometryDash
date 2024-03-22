@@ -25,35 +25,30 @@ Timer gTime;
 
 int main( int argc, char* args[] )
 {
-    //Start up SDL and create window
     if( !init() )
     {
         printf( "Failed to initialize!\n" );
     }
     else
     {
-        //Load media
         if( !loadMedia() )
         {
             printf( "Failed to load media!\n" );
         }
         else
         {
-            //Main loop flag
             bool quit = false;
-
-            //Event handler
+            
             SDL_Event e;
             gMap.LoadMap("djsk");
             gMap.LoadTileMap(gRenderer);
+            player.loadImage(gRenderer);
 
-            //While application is running
             while( !quit )
             {
-                //Handle events on queue
+                gTime.start();
                 while( SDL_PollEvent( &e ) != 0 )
                 {
-                    //User requests quit
                     if( e.type == SDL_QUIT )
                     {
                         quit = true;
@@ -61,11 +56,9 @@ int main( int argc, char* args[] )
                     player.HandleEvent(e);
                 }
 
-                //Clear screen
                 SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
                 SDL_RenderClear(gRenderer);
 
-                //Render background texture to screen
                 gBackgroundTexture.render(gRenderer);
                 
                 gMap.getPos_x(player.Pos_x());
@@ -74,17 +67,41 @@ int main( int argc, char* args[] )
                 
                 player.GetMap(gMap.getMap());
                 
-                player.DoWave();
-                
-                player.Show(gRenderer);
+                switch (player.getType()) {
+                    case BLOCK:
+                        player.DoBlock();
+                        player.ShowBlock(gRenderer);
+                        break;
+                    case BALL:
+                        player.DoBall();
+                        player.ShowBall(gRenderer);
+                        break;
+                    case SHIP:
+                        player.DoShip();
+                        player.ShowShip(gRenderer);
+                        break;
+//                    case UFO:
+//                        player.DoUFO();
+//                        break;
+                    case SPIDER:
+                        player.DoSpider();
+                        player.ShowSpider(gRenderer);
+                        break;
+                    case ROBOT:
+                        player.DoRobot();
+                        player.ShowRobot(gRenderer);
+                        break;
+                    case WAVE:
+                        player.DoWave();
+                        player.ShowWave(gRenderer);
+                        break;
+                }
 
-                //Update screen
                 SDL_RenderPresent(gRenderer);
                 
                 int real_time = gTime.getTicks();
                 if(real_time < TIME_1_FPS) {
-                    int delay_time = TIME_1_FPS-real_time;
-                    SDL_Delay(delay_time);
+                    SDL_Delay(TIME_1_FPS-real_time);
                 }
             }
         }

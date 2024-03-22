@@ -24,10 +24,11 @@ void Map::LoadTileMap(SDL_Renderer *gRenderer) {
         std::string s;
         if(i < 10) {
             s += "MapGD/map";
+            s += std::to_string(i);
         } else {
             s += "MapGD/gate";
+            s += std::to_string(i-10);
         }
-        s += std::to_string(i%10);
         s += ".png";
         TileMap[i].loadFromFile(s, gRenderer);
     }
@@ -59,10 +60,10 @@ void Map::DrawMap(SDL_Renderer *gRenderer) {
         }
         tile_y++;
     }
-    game_map.start_x = pos_x-3*TILE_SIZE;
-    if(pos_x <= 3*TILE_SIZE) {
+    game_map.start_x = pos_x-2*TILE_SIZE;
+    if(pos_x <= 2*TILE_SIZE) {
         game_map.start_x = 0;
-    } else if(pos_x >= game_map.max_x - SCREEN_WIDTH + 3*TILE_SIZE) {
-        game_map.start_x = game_map.max_x - SCREEN_WIDTH;
+    } else if(pos_x >= game_map.max_x - SCREEN_WIDTH + TILE_SIZE) {
+        game_map.start_x = game_map.max_x - SCREEN_WIDTH - TILE_SIZE;
     }
 }
