@@ -34,7 +34,7 @@ const int MAX_TILE = 30;
 const float GRAVITY = 1.598*BLOCK_SIZE/FPS;
 const float RUN_SPEED = 10.386*TILE_SIZE/FPS;
 const float JUMP_SPEED = sqrt(2*GRAVITY*2.1333*TILE_SIZE);
-const float MAX_FALL_SPEED = 4.743*4*BLOCK_SIZE/FPS;
+const float MAX_FALL_SPEED = 4.743*2.5*BLOCK_SIZE/FPS;
 
 static int mouseClick = 0;
 

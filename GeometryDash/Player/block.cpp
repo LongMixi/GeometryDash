@@ -48,6 +48,7 @@ void pBlock::loadImage(SDL_Renderer *renderer) {
     }
     mSpider[14].loadFromFile("spiderFall.png", renderer);
     mSpider[15].loadFromFile("spiderJump.png", renderer);
+    mUFO.loadFromFile("ufo_16.png", renderer);
 }
 
 void pBlock::HandleEvent(SDL_Event event) {
@@ -138,7 +139,16 @@ void pBlock::ShowSpider(SDL_Renderer *gRenderer, SDL_Rect *clip) {
         mSpider[14].setRect(pos_x - map_start_x , pos_y);
         if(reverseGravity < 0) mSpider[14].renderEx(gRenderer, NULL, SDL_FLIP_VERTICAL);
         else mSpider[14].render(gRenderer);
-        cntFrame = 0;
+    }
+}
+
+
+void pBlock::ShowUFO(SDL_Renderer *gRenderer, SDL_Rect *clip) {
+    mUFO.setRect(pos_x - map_start_x , pos_y);
+    if(reverseGravity > 0) {
+        mUFO.render(gRenderer);
+    } else {
+        mUFO.renderEx(gRenderer, NULL, SDL_FLIP_VERTICAL);
     }
 }
 
@@ -181,7 +191,6 @@ void pBlock::DoBall() {
     pos_y += val_y;
 }
 
-
 void pBlock::DoSpider() {
     val_x = RUN_SPEED;
     if(!onGround && !isJumping) {
@@ -210,7 +219,6 @@ void pBlock::DoSpider() {
     pos_y += val_y;
 }
 
-
 void pBlock::DoShip() {
     val_x = RUN_SPEED;
     if(!onGround) {
@@ -230,7 +238,6 @@ void pBlock::DoShip() {
     pos_y += val_y;
 }
 
-
 void pBlock::DoWave() {
     val_x = RUN_SPEED;
     if(!onGround) {
@@ -243,7 +250,6 @@ void pBlock::DoWave() {
     pos_x += val_x;
     pos_y += val_y;
 }
-
 
 void pBlock::DoRobot() {
     val_x = RUN_SPEED;
@@ -269,6 +275,27 @@ void pBlock::DoRobot() {
     pos_y += val_y;
 }
 
+void pBlock::DoUFO() {
+    val_x = RUN_SPEED;
+    if(!onGround) {
+        val_y += GRAVITY * reverseGravity;
+        if(val_y * reverseGravity >= MAX_FALL_SPEED) {
+            val_y = MAX_FALL_SPEED * reverseGravity;
+        }
+    }
+    if(mouseClick) {
+        val_y = -JUMP_SPEED * reverseGravity;
+        isJumping = true;
+        onGround = false;
+    }
+    if(mouseRepeat == true) {
+        mouseClick = 0;
+    }
+    CheckToMap();
+    pos_x += val_x;
+    pos_y += val_y;
+}
+
 
 void pBlock::CheckToMap() {
     int x1, x2;
@@ -286,7 +313,7 @@ void pBlock::CheckToMap() {
         pos_x = -TILE_SIZE;
         reverseGravity = 1;
         pos_y = SCREEN_HEIGHT-3*TILE_SIZE;
-        typePlayer = SPIDER;
+        typePlayer = UFO;
         val_y = 0;
     }
     
@@ -356,13 +383,23 @@ void pBlock::CheckToMap() {
     }
     
     //check vertical top
-    y1 = (pos_y + val_y - 1)/TILE_SIZE;
-    
-    if(MapType[y2][x1] != 0 || MapType[y1][x2] != 0) {
-        pos_y = (y1+1)*TILE_SIZE;
-        isJumping = false;
-        val_y = 0;
+    if(reverseGravity > 0) {
+        y1 = (pos_y + val_y - 1)/TILE_SIZE;
+        if(MapType[y1][x1] != 0 || MapType[y1][x2] != 0) {
+            pos_y = (y1+1)*TILE_SIZE;
+            isJumping = false;
+            val_y = 0;
+        } else {
+            onGround = false;
+        }
     } else {
-        onGround = false;
+        y2 = (pos_y + BLOCK_SIZE + val_y - 1)/TILE_SIZE;
+        if(MapType[y2][x1] != 0 || MapType[y2][x2] != 0) {
+            pos_y = (y2-1)*TILE_SIZE;
+            isJumping = false;
+            val_y = 0;
+        } else {
+            onGround = false;
+        }
     }
 }

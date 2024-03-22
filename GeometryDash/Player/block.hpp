@@ -43,6 +43,7 @@ public:
     void DoShip();
     void DoWave();
     void DoRobot();
+    void DoUFO();
     
     void CheckToMap();
     
@@ -57,14 +58,14 @@ private:
     bool isJumping = false;
     int reverseGravity = 1;
     bool mouseRepeat = false;
-    int typePlayer = SPIDER;
+    int typePlayer = UFO;
     int val_angle = 0;
     int cntFrame = 0;
     
     int map_start_x;
     
     Timer mTime;
-    ImageLoader mBlock, mBall, mShip, mWave;
+    ImageLoader mBlock, mBall, mShip, mWave, mUFO;
     ImageLoader mRobot[15], mSpider[16];
 };
 

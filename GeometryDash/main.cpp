@@ -40,7 +40,7 @@ int main( int argc, char* args[] )
             bool quit = false;
             
             SDL_Event e;
-            gMap.LoadMap("djsk");
+//            gMap.LoadMap("djsk");
             gMap.LoadTileMap(gRenderer);
             player.loadImage(gRenderer);
 
@@ -80,9 +80,10 @@ int main( int argc, char* args[] )
                         player.DoShip();
                         player.ShowShip(gRenderer);
                         break;
-//                    case UFO:
-//                        player.DoUFO();
-//                        break;
+                    case UFO:
+                        player.DoUFO();
+                        player.ShowUFO(gRenderer);
+                        break;
                     case SPIDER:
                         player.DoSpider();
                         player.ShowSpider(gRenderer);
